@@ -14,12 +14,6 @@ func (suite *TrainerTestSuite) SetupTest() {
 	suite.Trainer = *NewTrainer()
 }
 
-func (suite *TrainerTestSuite) TestPlayWithFullStorage() {
-	suite.Trainer.storage.pokemon = make([]Pokemon, 1000)
-	err := suite.Trainer.Play()
-	suite.Error(err)
-}
-
 func (suite *TrainerTestSuite) TestQuickFilterIVTrue() {
 	pokemon := Pokemon{iv: IV{Attack: 12, Defense: 12, HP: 13}}
 	suite.True(suite.Trainer.QuickFilter(pokemon))

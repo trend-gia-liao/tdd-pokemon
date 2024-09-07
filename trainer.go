@@ -103,7 +103,10 @@ func NewTrainer() *Trainer {
 
 func (t *Trainer) Play() error {
 	if t.storage.getLeftSpace() <= 0 {
-		return fmt.Errorf("your storage is full. Transfer pokemon or upgrade storage")
+		managed := t.Manage()
+		if managed == false {
+			return fmt.Errorf("your storage is full. Upgrade storage")
+		}
 	}
 
 	pokemon, index := t.Gotcha()
@@ -114,13 +117,16 @@ func (t *Trainer) Play() error {
 	return nil
 }
 
-func (t *Trainer) Manage() {
+func (t *Trainer) Manage() bool {
+	managed := false
 	for i := len(t.storage.pokemon) - 1; i >= 0; i-- {
 		pokemon := t.storage.pokemon[i]
 		if t.PreciseFilter(pokemon) == false {
 			_ = t.Transfer(i)
+			managed = true
 		}
 	}
+	return managed
 }
 
 func (t *Trainer) QuickFilter(pokemon Pokemon) bool {
